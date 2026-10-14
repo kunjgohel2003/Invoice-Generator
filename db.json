@@ -1,0 +1,274 @@
+{
+  "invoices": [
+    {
+      "from": {
+        "name": "Arya Traders",
+        "email": "AryaTrader@icloud.com",
+        "phone": "7844845414",
+        "address": "No. 7, Om Tower, Lok Tilak Road",
+        "city": "Vadodara",
+        "pincode": "894484"
+      },
+      "billedTo": {
+        "name": "Rakesh Rawani",
+        "email": "RakeshR@yahoo.com",
+        "phone": "8764515645",
+        "address": "7, Prerna Bunglows, CJ Road",
+        "city": "Vadodara",
+        "pincode": "894475"
+      },
+      "number": "INV-2026-005",
+      "invoiceDate": "2026-10-06",
+      "dueDate": "2026-10-15",
+      "status": "Paid",
+      "items": [
+        {
+          "description": "Utensils",
+          "unitPrice": 450,
+          "quantity": 2,
+          "tax": 18
+        },
+        {
+          "description": "Hand Wash",
+          "unitPrice": 230,
+          "quantity": 3,
+          "tax": 18
+        },
+        {
+          "description": "Wheel Bar",
+          "unitPrice": 40,
+          "quantity": 8,
+          "tax": 18
+        },
+        {
+          "description": "Wheat Bread",
+          "unitPrice": 80,
+          "quantity": 2,
+          "tax": 18
+        },
+        {
+          "description": "Tea/Coffee",
+          "unitPrice": 370,
+          "quantity": 2,
+          "tax": 18
+        },
+        {
+          "description": "Sugar",
+          "unitPrice": 400,
+          "quantity": 1,
+          "tax": 18
+        },
+        {
+          "description": "Disposable Plates",
+          "unitPrice": 8,
+          "quantity": 40,
+          "tax": 18
+        },
+        {
+          "description": "Face Wash",
+          "unitPrice": 490,
+          "quantity": 2,
+          "tax": 18
+        },
+        {
+          "description": "Wheat Flour ",
+          "unitPrice": 40,
+          "quantity": 1,
+          "tax": 12
+        },
+        {
+          "description": "Water Bottle",
+          "unitPrice": 260,
+          "quantity": 2,
+          "tax": 18
+        }
+      ],
+      "id": "INV-2026-005",
+      "client": "Rakesh Rawani",
+      "initials": "RA",
+      "detail": "Utensils, Hand Wash ...",
+      "date": "2026-10-06",
+      "amount": 5980.2
+    },
+    {
+      "from": {
+        "name": "Regal Decoraters",
+        "email": "Regaldecoraters@gmail.com",
+        "phone": "9845421521",
+        "address": "G-7, Ground Floor, Ganesh Glory, Gota",
+        "city": "Ahmedabad",
+        "pincode": "8741454"
+      },
+      "billedTo": {
+        "name": "Sneha Agrawal",
+        "email": "Snehagrawal03@gmail.com",
+        "phone": "8452182155",
+        "address": "12-Shivalik Villa, Rajpath Rangoli Road",
+        "city": "Ahmedabad",
+        "pincode": "3584542"
+      },
+      "number": "INV-2026-004",
+      "invoiceDate": "2026-10-02",
+      "dueDate": "2026-10-30",
+      "status": "Due",
+      "items": [
+        {
+          "description": "Birthday Celebration",
+          "unitPrice": 18000,
+          "quantity": 1,
+          "tax": 12
+        },
+        {
+          "description": "Balloon Decor",
+          "unitPrice": 9000,
+          "quantity": 1,
+          "tax": 12
+        }
+      ],
+      "id": "INV-2026-004",
+      "client": "Sneha Agrawal",
+      "initials": "SN",
+      "detail": "Birthday Celebration, Balloon Decor",
+      "date": "2026-10-02",
+      "amount": 30240.000000000007
+    },
+    {
+      "from": {
+        "name": "Divine Jewellers",
+        "email": "Divinejewellers@gmail.com",
+        "phone": "8799924529",
+        "address": "Divine Jewellers, Sector 15",
+        "city": "Gandhinagar",
+        "pincode": "5872585"
+      },
+      "billedTo": {
+        "name": "Ayush Patel",
+        "email": "Ayushpatel@gmail.com",
+        "phone": "8745412515",
+        "address": "A-8, Akshay Towers, Anand Nagar Road",
+        "city": "Ahmedabad",
+        "pincode": "380045"
+      },
+      "number": "INV-2026-003",
+      "invoiceDate": "2026-10-02",
+      "dueDate": "2026-10-15",
+      "status": "Paid",
+      "items": [
+        {
+          "description": "Gold Ring",
+          "unitPrice": 95500,
+          "quantity": 1,
+          "tax": 18
+        },
+        {
+          "description": "Silver Chain",
+          "unitPrice": 18000,
+          "quantity": 1,
+          "tax": 18
+        }
+      ],
+      "id": "INV-2026-003",
+      "client": "Ayush Patel",
+      "initials": "AY",
+      "detail": "Gold Ring, Silver Chain",
+      "date": "2026-10-02",
+      "amount": 133930
+    },
+    {
+      "from": {
+        "name": "LensKart",
+        "email": "Lenskart@gmail.com",
+        "phone": "9858745693",
+        "address": "G-1, Abhi Complex, Bandra",
+        "city": "Mumbai",
+        "pincode": "0369874"
+      },
+      "billedTo": {
+        "name": "Raj Purohit",
+        "email": "Raj@gmail.com",
+        "phone": "7539541254",
+        "address": "C-3001, Rivera Elite, Churchgate",
+        "city": "Mumbai",
+        "pincode": "0369854"
+      },
+      "number": "INV-2026-002",
+      "invoiceDate": "2026-10-02",
+      "dueDate": "2026-10-09",
+      "status": "Due",
+      "items": [
+        {
+          "description": "Lens (Blue Whisp)",
+          "unitPrice": 1700,
+          "quantity": 1,
+          "tax": 18
+        },
+        {
+          "description": "Lens Cleaner",
+          "unitPrice": 150,
+          "quantity": 3,
+          "tax": 12
+        },
+        {
+          "description": "Sunglasses",
+          "unitPrice": 2800,
+          "quantity": 1,
+          "tax": 18
+        }
+      ],
+      "id": "INV-2026-002",
+      "client": "Raj Purohit",
+      "initials": "RA",
+      "detail": "Lens (Blue Whisp), Lens Cleaner ...",
+      "date": "2026-10-02",
+      "amount": 5814
+    },
+    {
+      "id": "INV-2026-001",
+      "number": "INV-2026-001",
+      "client": "Emperial Designers Pvt Ltd",
+      "initials": "EM",
+      "detail": "Design services, Shopify services ...",
+      "date": "2026-10-02",
+      "amount": 150020,
+      "status": "Due",
+      "from": {
+        "name": "Theta technolabs Pvt Ltd",
+        "email": "Thetatechnolabs@gmail.com",
+        "phone": "1234567890",
+        "address": "A-1201, Privilon, Iscon cross road",
+        "city": "Ahmedabad",
+        "pincode": "258369"
+      },
+      "billedTo": {
+        "name": "Emperial Designers Pvt Ltd",
+        "email": "Emperialtechnologies@gmail.com",
+        "phone": "9876543210",
+        "address": "B-1001, Privilon, Iscon Cross Road",
+        "city": "Ahmedabad",
+        "pincode": "741852"
+      },
+      "invoiceDate": "2026-10-02",
+      "dueDate": "2026-10-12",
+      "items": [
+        {
+          "description": "Design services",
+          "unitPrice": 28500,
+          "quantity": 1,
+          "tax": 12
+        },
+        {
+          "description": "Shopify services ",
+          "unitPrice": 47500,
+          "quantity": 1,
+          "tax": 12
+        },
+        {
+          "description": "Database management",
+          "unitPrice": 55000,
+          "quantity": 1,
+          "tax": 18
+        }
+      ]
+    }
+  ]
+}
