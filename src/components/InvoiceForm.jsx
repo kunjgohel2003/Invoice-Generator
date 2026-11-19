@@ -30,7 +30,7 @@ export const capitalizeWords = (str) => {
   );
 };
 
-const copyInvoice = (invoice, existingInvoices = []) => {
+const copyInvoice = (invoice, existingInvoices = [], username) => {
   const source = JSON.parse(JSON.stringify(invoice || blankInvoice));
   const todayDate = new Date().toISOString().slice(0, 10);
   const invoiceDate =
@@ -41,6 +41,7 @@ const copyInvoice = (invoice, existingInvoices = []) => {
   const generatedNumber = generateNextInvoiceNumber(
     existingInvoices,
     targetYear,
+    username,
   );
   return {
     ...blankInvoice,
@@ -717,10 +718,11 @@ export default function InvoiceForm({
   onBack,
   initialInvoice,
   existingInvoices = [],
+  currentUser,
   onNotify,
 }) {
   const [invoice, setInvoice] = useState(() =>
-    copyInvoice(initialInvoice, existingInvoices),
+    copyInvoice(initialInvoice, existingInvoices, currentUser?.username),
   );
   const formRef = useRef(null);
 
@@ -729,7 +731,11 @@ export default function InvoiceForm({
       const pickedYear = invoice.invoiceDate
         ? new Date(invoice.invoiceDate).getFullYear()
         : new Date().getFullYear();
-      const nextNum = generateNextInvoiceNumber(existingInvoices, pickedYear);
+      const nextNum = generateNextInvoiceNumber(
+        existingInvoices,
+        pickedYear,
+        currentUser?.username,
+      );
       setInvoice((prev) => {
         if (prev.number !== nextNum) {
           return { ...prev, number: nextNum };
@@ -737,7 +743,7 @@ export default function InvoiceForm({
         return prev;
       });
     }
-  }, [existingInvoices, initialInvoice, invoice.invoiceDate]);
+  }, [existingInvoices, initialInvoice, invoice.invoiceDate, currentUser?.username]);
 
   const updateParty = (party, key, value) => {
     const formattedValue =

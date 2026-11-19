@@ -10,7 +10,9 @@ import {
   CheckIcon,
   FilterIcon,
   ResetIcon,
+  DownloadIcon,
 } from "../components/Icons";
+import { exportAllInvoicesToPdf } from "../utils/pdfExport";
 
 export default function History({
   invoices,
@@ -22,11 +24,16 @@ export default function History({
   onOpen,
   onEdit,
   onBack,
+  currentUser,
+  onNotify,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterDropdownRef = useRef(null);
+
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [exportProgress, setExportProgress] = useState("");
 
   const [sortBy, setSortBy] = useState("client-az");
   const [isSortOpen, setIsSortOpen] = useState(false);
@@ -136,6 +143,34 @@ export default function History({
       }
     });
 
+  const handleExportAllPdf = async () => {
+    if (invoices.length === 0 || isExportingPdf) return;
+    try {
+      setIsExportingPdf(true);
+      setExportProgress("Preparing...");
+      onNotify?.("Preparing combined PDF of all invoices...", "info");
+
+      const result = await exportAllInvoicesToPdf(
+        invoices,
+        currentUser?.username || "user",
+        ({ message }) => {
+          setExportProgress(message);
+        }
+      );
+
+      onNotify?.(
+        `All ${result.count} invoice(s) exported into 1 PDF (${result.totalPages} pages)!`,
+        "success"
+      );
+    } catch (err) {
+      console.error("Failed to export all invoices to PDF:", err);
+      onNotify?.("Failed to generate combined PDF. Please try again.", "error");
+    } finally {
+      setIsExportingPdf(false);
+      setExportProgress("");
+    }
+  };
+
   return (
     <section className="page history-page">
       <div className="page-nav-back">
@@ -154,6 +189,20 @@ export default function History({
           </p>
         </div>
         <div className="history-actions">
+          <button
+            type="button"
+            className="secondary-btn export-all-pdf-history-btn"
+            onClick={handleExportAllPdf}
+            disabled={invoices.length === 0 || isExportingPdf}
+            title="Download all invoices compiled into a single combined PDF"
+          >
+            <DownloadIcon size={15} />
+            <span>
+              {isExportingPdf
+                ? exportProgress || "Exporting..."
+                : "Export All (PDF)"}
+            </span>
+          </button>
           <span className="selected-badge">{selected.length} selected</span>
           <button
             className="danger delete-btn"

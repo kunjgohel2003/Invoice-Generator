@@ -82,8 +82,9 @@ import {
   CheckIcon,
 } from "./Icons";
 
-function StatusBadge({ invoice, onStatusChange }) {
+function StatusBadge({ invoice, onStatusChange, isLastRow = false }) {
   const [open, setOpen] = useState(false);
+  const [openAbove, setOpenAbove] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -113,6 +114,20 @@ function StatusBadge({ invoice, onStatusChange }) {
     );
   }
 
+  const handleToggle = (e) => {
+    e.stopPropagation();
+    if (!open) {
+      if (isLastRow) {
+        setOpenAbove(true);
+      } else if (dropdownRef.current) {
+        const rect = dropdownRef.current.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - rect.bottom;
+        setOpenAbove(spaceBelow < 120);
+      }
+    }
+    setOpen((prev) => !prev);
+  };
+
   const handleSelect = (e, newStatus) => {
     e.stopPropagation();
     setOpen(false);
@@ -122,14 +137,11 @@ function StatusBadge({ invoice, onStatusChange }) {
   };
 
   return (
-    <div className="status-dropdown-wrap" ref={dropdownRef}>
+    <div className={`status-dropdown-wrap ${openAbove ? "open-above" : ""}`} ref={dropdownRef}>
       <button
         type="button"
         className={`status-btn ${currentStatus.toLowerCase()} ${open ? "open" : ""}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          setOpen((prev) => !prev);
-        }}
+        onClick={handleToggle}
         aria-haspopup="listbox"
         aria-expanded={open}
         title="Click to change status"
@@ -144,7 +156,7 @@ function StatusBadge({ invoice, onStatusChange }) {
 
       {open && (
         <div
-          className="status-menu"
+          className={`status-menu ${openAbove ? "menu-above" : ""}`}
           role="listbox"
           onClick={(e) => e.stopPropagation()}
         >
@@ -237,7 +249,7 @@ export default function InvoiceTable({
           </div>
         )}
 
-        {invoices.map((invoice) => {
+        {invoices.map((invoice, index) => {
           const isSelected = selected.includes(invoice.id);
           return (
             <div
@@ -285,6 +297,7 @@ export default function InvoiceTable({
                 <StatusBadge
                   invoice={invoice}
                   onStatusChange={onStatusChange}
+                  isLastRow={index === invoices.length - 1}
                 />
               </div>
 
@@ -371,7 +384,7 @@ export default function InvoiceTable({
             </tr>
           </thead>
           <tbody>
-            {invoices.map((invoice) => (
+            {invoices.map((invoice, index) => (
               <tr key={invoice.id}>
                 {selectable && (
                   <td className="td-select">
@@ -419,6 +432,7 @@ export default function InvoiceTable({
                   <StatusBadge
                     invoice={invoice}
                     onStatusChange={onStatusChange}
+                    isLastRow={index === invoices.length - 1}
                   />
                 </td>
                 <td className="td-actions">

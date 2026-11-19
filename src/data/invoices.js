@@ -8,6 +8,7 @@ export const invoices = [
     date: "23 Sep 2026",
     amount: 28320,
     status: "Paid",
+    username: "demo",
   },
 ];
 
@@ -29,12 +30,16 @@ export const blankInvoice = {
 };
 
 /**
- * Returns the localStorage key used to store the sequence counter for a specific year.
+ * Returns the localStorage key used to store the sequence counter for a specific year and user.
  *
  * @param {string|number} year - The target calendar year
- * @returns {string} The localStorage key (e.g., "invoice_last_seq_2026")
+ * @param {string} [username] - The user whose sequence counter is retrieved
+ * @returns {string} The localStorage key (e.g., "invoice_last_seq_demo_2026")
  */
-export const getCounterKey = (year) => `invoice_last_seq_${year}`;
+export const getCounterKey = (year, username) => {
+  const userPrefix = username ? `${String(username).trim().toLowerCase()}_` : "";
+  return `invoice_last_seq_${userPrefix}${year}`;
+};
 
 /**
  * Scans a list of invoice records to discover the highest invoice sequence number for a given year.
@@ -97,19 +102,22 @@ export function getMaxInvoiceSequence(invoices = [], targetYear) {
  *
  * @param {Array<Object>} [invoices=[]] - Existing invoice records
  * @param {string|number} [targetYear] - The year to synchronize
+ * @param {string} [username] - The active username
  * @returns {number} The maximum sequence synchronized
  */
-export function syncInvoiceSequence(invoices = [], targetYear) {
+export function syncInvoiceSequence(invoices = [], targetYear, username) {
   const year = targetYear
     ? String(targetYear)
     : String(new Date().getFullYear());
   const max = getMaxInvoiceSequence(invoices, year);
   try {
-    const counterKey = getCounterKey(year);
-    if (max > 0) {
-      localStorage.setItem(counterKey, String(max));
-    } else {
-      localStorage.removeItem(counterKey);
+    if (typeof localStorage !== "undefined") {
+      const counterKey = getCounterKey(year, username);
+      if (max > 0) {
+        localStorage.setItem(counterKey, String(max));
+      } else {
+        localStorage.removeItem(counterKey);
+      }
     }
   } catch (e) {
     console.error(e);
@@ -121,16 +129,19 @@ export function syncInvoiceSequence(invoices = [], targetYear) {
  * Resets the invoice sequence counter stored in localStorage.
  *
  * @param {string|number} [year] - If specified, resets sequence for that year only; otherwise resets all years.
+ * @param {string} [username] - Optional username
  */
-export function resetInvoiceSequence(year) {
+export function resetInvoiceSequence(year, username) {
   try {
-    if (year) {
-      localStorage.removeItem(getCounterKey(year));
-    } else {
-      for (let i = localStorage.length - 1; i >= 0; i--) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith("invoice_last_seq_")) {
-          localStorage.removeItem(key);
+    if (typeof localStorage !== "undefined") {
+      if (year) {
+        localStorage.removeItem(getCounterKey(year, username));
+      } else {
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith("invoice_last_seq_")) {
+            localStorage.removeItem(key);
+          }
         }
       }
     }
@@ -144,9 +155,10 @@ export function resetInvoiceSequence(year) {
  *
  * @param {Array<Object>} [invoices=[]] - Existing invoice records
  * @param {string|number} [targetYear] - Target calendar year
+ * @param {string} [username] - Active username
  * @returns {number} The next integer sequence (e.g., 2 if highest is 1)
  */
-export function getNextInvoiceSequence(invoices = [], targetYear) {
+export function getNextInvoiceSequence(invoices = [], targetYear, username) {
   const year = targetYear
     ? String(targetYear)
     : String(new Date().getFullYear());
@@ -154,9 +166,11 @@ export function getNextInvoiceSequence(invoices = [], targetYear) {
 
   let storedLastSeq = 0;
   try {
-    const saved = localStorage.getItem(getCounterKey(year));
-    if (saved) {
-      storedLastSeq = parseInt(saved, 10) || 0;
+    if (typeof localStorage !== "undefined") {
+      const saved = localStorage.getItem(getCounterKey(year, username));
+      if (saved) {
+        storedLastSeq = parseInt(saved, 10) || 0;
+      }
     }
   } catch (e) {
     console.error(e);
@@ -166,11 +180,13 @@ export function getNextInvoiceSequence(invoices = [], targetYear) {
   if (storedLastSeq > maxFromInvoices) {
     storedLastSeq = maxFromInvoices;
     try {
-      const counterKey = getCounterKey(year);
-      if (maxFromInvoices > 0) {
-        localStorage.setItem(counterKey, String(maxFromInvoices));
-      } else {
-        localStorage.removeItem(counterKey);
+      if (typeof localStorage !== "undefined") {
+        const counterKey = getCounterKey(year, username);
+        if (maxFromInvoices > 0) {
+          localStorage.setItem(counterKey, String(maxFromInvoices));
+        } else {
+          localStorage.removeItem(counterKey);
+        }
       }
     } catch (e) {
       console.error(e);
@@ -186,13 +202,14 @@ export function getNextInvoiceSequence(invoices = [], targetYear) {
  *
  * @param {Array<Object>} [invoices=[]] - Existing invoice records
  * @param {string|number} [targetYear] - Target calendar year
+ * @param {string} [username] - Active username
  * @returns {string} Formatted invoice number string
  */
-export function generateNextInvoiceNumber(invoices = [], targetYear) {
+export function generateNextInvoiceNumber(invoices = [], targetYear, username) {
   const year = targetYear
     ? String(targetYear)
     : String(new Date().getFullYear());
-  const nextSeq = getNextInvoiceSequence(invoices, year);
+  const nextSeq = getNextInvoiceSequence(invoices, year, username);
   return `INV-${year}-${String(nextSeq).padStart(3, "0")}`;
 }
 
@@ -201,19 +218,22 @@ export function generateNextInvoiceNumber(invoices = [], targetYear) {
  * ensuring subsequent calls generate the next successive number.
  *
  * @param {string} invoiceIdOrNumber - The invoice number or ID being committed (e.g. "INV-2026-003")
+ * @param {string} [username] - Active username
  */
-export function commitInvoiceSequence(invoiceIdOrNumber) {
+export function commitInvoiceSequence(invoiceIdOrNumber, username) {
   const match = String(invoiceIdOrNumber || "").match(/^INV-(\d{4})-(\d+)$/i);
   if (match) {
     const year = match[1];
     const num = parseInt(match[2], 10);
     if (!isNaN(num)) {
       try {
-        const counterKey = getCounterKey(year);
-        const saved =
-          parseInt(localStorage.getItem(counterKey) || "0", 10) || 0;
-        if (num > saved) {
-          localStorage.setItem(counterKey, String(num));
+        if (typeof localStorage !== "undefined") {
+          const counterKey = getCounterKey(year, username);
+          const saved =
+            parseInt(localStorage.getItem(counterKey) || "0", 10) || 0;
+          if (num > saved) {
+            localStorage.setItem(counterKey, String(num));
+          }
         }
       } catch (e) {
         console.error(e);

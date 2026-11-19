@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom";
 import InvoiceTable, { money } from "../components/InvoiceTable";
 import { CardIcon, CheckIcon, ClockTimerIcon, PlusIcon } from "../components/Icons";
 
 export default function Dashboard({
   invoices,
+  currentUser,
   onCreate,
   onOpen,
   onEdit,
@@ -48,7 +50,28 @@ export default function Dashboard({
       <header className="page-head dashboard-head">
         <div className="head-text">
           <h1>Invoice Generator</h1>
-          <p className="subtitle">Manage, create, and track client billing</p>
+          <p className="subtitle">
+            {currentUser?.username ? (
+              <>
+                Workspace for{" "}
+                <Link
+                  to="/profile"
+                  style={{
+                    color: "#2563eb",
+                    fontWeight: 700,
+                    textDecoration: "underline",
+                    textUnderlineOffset: "3px",
+                  }}
+                  title="Click to manage account settings"
+                >
+                  @{currentUser.username}
+                </Link>{" "}
+                • Manage, create, and track client billing
+              </>
+            ) : (
+              "Manage, create, and track client billing"
+            )}
+          </p>
         </div>
         <button className="primary create-main-btn" onClick={onCreate}>
           <PlusIcon size={16} />
